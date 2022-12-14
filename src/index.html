@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Место</title>
+</head>
+
+<body class="page">
+
+    <header class="header">
+        <img class="header__logo" src="<%=require('./images/logo.svg')%>" alt="Лого Место">
+
+    </header>
+
+    <main class="content">
+
+        <section class="profile">
+
+            <div class="profile__container">
+                <button class="button profile__avatar-button" type="button" aria-label="Изменить аватар" name="avatar-button"></button>
+
+                <img class="profile__avatar" src="<%=require('./images/image.jpg')%>" alt="Фото Кусто">
+
+                <div class="profile__section">
+                    <div class="profile__info">
+                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+
+                        <button type="button" class="profile__edit-button"></button>
+
+                    </div>
+                    <p class="profile__description">Исследователь океана</p>
+                </div>
+            </div>
+
+            <button type="button" class="profile__add-button" name="add-button"></button>
+
+
+        </section>
+
+        <section class="elements">
+            <ul class="elements__table">
+            </ul>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p class="footer__copyrights">&copy; 2020 Mesto Russia</p>
+    </footer>
+
+
+    <div class="popup popup_edit-profile">
+        <div class="popup__container">
+            <button type="button" class="popup__button-close" aria-label="Закрыть окно"></button>
+            <h2 class="popup__title">Редактировать профиль</h2>
+            <form class="form popup__form" name="profileData" novalidate>
+                <fieldset class="popup__form-fieldset">
+                    <input type="text" class="popup__field popup__field-title" placeholder="Введите имя" value="" id="input-title" minlength="2" maxlength="40" required>
+                    <span class="popup__input-error input-title-error"></span>
+                </fieldset>
+
+                <fieldset class="popup__form-fieldset">
+                    <input type="text" class="popup__field popup__field-job" placeholder="О Вас" value="" id="input-job" minlength="2" maxlength="200" required>
+                    <span class="popup__input-error  input-job-error"></span>
+                </fieldset>
+                <button class="button popup__button-save" value="Сохранить" id="button-save">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup popup_add-card">
+        <div class="popup__container">
+            <button type="button" class="popup__button-close"></button>
+            <form class="form popup__form" name="add-image" novalidate>
+
+                <h2 class="popup__title">Новое место</h2>
+                <fieldset class="popup__form-fieldset">
+                    <input type="text" class="popup__field popup__field-place" id="input-name" placeholder="Название" value="" minlength="2" maxlength="30" required>
+                    <span class="popup__input-error input-name-error"></span>
+
+                </fieldset>
+                <fieldset class="popup__form-fieldset">
+                    <input type="url" class="popup__field popup__field-link" id="input-link" placeholder="Ссылка на картинку" value="" required>
+                    <span class="popup__input-error input-link-error"></span>
+
+                </fieldset>
+
+                <button type="submit" class="popup__button popup__button-save" id="button-add">Сохранить</button>
+
+            </form>
+        </div>
+    </div>
+
+
+    <div class="popup popup_big_image">
+        <div class="popup__section">
+            <button type="button" class="popup__button-close"></button>
+            <img class="popup__image" src="<%=require('./images/joel-filipe-_AjqGGafofE-unsplash.jpg')%>" alt="">
+            <h2 class="popup__text"></h2>
+        </div>
+    </div>
+
+    <template id="cards">
+        <li class="card">
+            <button class="button__card" type="button">
+              <img class="card__image" src="<%=require('./images/joel-filipe-_AjqGGafofE-unsplash.jpg')%>" alt=""></button>
+            <button type="button" class="card__button_remove"></button>
+            <div class="card__section">
+                <h2 class="card__name"></h2>
+                <button type="button" class="button__like"></button>
+            </div>
+        </li> 
+    </template>
+
+</body>
+
+</html>
