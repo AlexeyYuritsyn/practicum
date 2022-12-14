@@ -31,9 +31,11 @@ export class PopupWithForm extends Popup {
 
     _handleSubmit = (evt) => {
         evt.preventDefault();
+        this._submitBtn.textContent = 'Сохранение...';
+        this._submitBtn.disabled = true;
         this._submitCallBack(this._getInputValues());
-        this.close();
     }
+
     setEventListeners() {
         super.setEventListeners();
         this._formElement.addEventListener('submit', this._handleSubmit);
@@ -46,7 +48,11 @@ export class PopupWithForm extends Popup {
             this._formElement.reset();
         }
         this._errorsResetCallBack();
-
+        if(this._popupSelector === 'popup_type_add-image') {
+            this._submitBtn.textContent = 'Создать';
+        } else {
+            this._submitBtn.textContent = 'Сохранить';
+        }
         super.open();
 
     }

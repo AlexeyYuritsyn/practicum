@@ -8,6 +8,7 @@ import { Api } from "../components/Api";
 
 import { UserInfo } from "../components/UserInfo.js";
 import { PicturePopup } from "../components/PicturePopup";
+import { PopupWithConfirmation } from '../components/PopupWithConfirmation.js';
 import {
     popupEditProfileOpenBtn,
     popupAddCardOpenBtn,
@@ -26,6 +27,11 @@ import {
     viewPopupConfiguration,
     imagePopupSelector,
     myId,
+    deletePopupSelector,
+    confirmationButtonSelector,
+    popupAvatarOpenBtn,
+    avatarPopupSelector,
+    avatarFormName,
 } from "../components/constanst";
 
 const api = new Api({
@@ -45,6 +51,16 @@ api.getUserInfo()
         console.log(err);
     });
 
+const handleAvatarSubmit = (data) => {
+    api.patchAvatarInfo(data)
+        .then((result) => {
+            user.setUserAvatar({avatar: result.avatar});
+            avatarPopup.close();
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+};
 
 const openDeletePopup = (data) => {
     deletePopup.setEventListeners(data);
@@ -138,7 +154,28 @@ const handleProfilePopupOpen = () => {
     profilePopup.open();
 };
 
+const handleAvatarPopupOpen = () => {
+    avatarPopup.open();
+}
+
+const avatarPopup = new PopupWithForm(
+    avatarPopupSelector,
+    avatarFormName,
+    popupConfiguration,
+    formConfiguration,
+    formValidators[avatarFormName].resetValidation,
+    handleAvatarSubmit
+);
+
+const deletePopup = new PopupWithConfirmation(
+    deletePopupSelector,
+    popupConfiguration,
+    confirmationButtonSelector,
+    api,
+);
+
 //Открытие попапа редактирования профиля
 popupEditProfileOpenBtn.addEventListener('click', handleProfilePopupOpen);
-
+popupAvatarOpenBtn.addEventListener('click', handleAvatarPopupOpen);
 popupAddCardOpenBtn.addEventListener('click', addCardSubmitHandler);
+avatarPopup.setEventListeners();

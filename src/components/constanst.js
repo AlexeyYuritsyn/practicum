@@ -4,6 +4,7 @@ import jellyfish from "../images/joel-filipe-_AjqGGafofE-unsplash.jpg";
 
 
 export const popupEditProfileOpenBtn = document.querySelector('.profile__edit-button');
+export const popupAvatarOpenBtn = document.querySelector('.profile__avatar-button');
 export const popupAddCardOpenBtn = document.querySelector('.profile__add-button');
 
 export const cardSwitch = document.getElementById('cards').content.querySelector('.card');
@@ -64,6 +65,7 @@ export const popupConfiguration = {
 export const profileConfiguration = {
     titleSelector: 'profile__name',
     jobSelector: 'profile__description',
+    avatarSelector: 'profile__avatar',
 }
 
 export const viewPopupConfiguration = {
@@ -77,6 +79,10 @@ export const profilePopupSelector = 'popup_edit-profile';
 export const imagePopupSelector = 'popup_big_image';
 export const newPlaceFormName = 'add-image';
 export const profileFormName = 'profileData';
+export const deletePopupSelector = 'popup_image_delete';
+export const confirmationButtonSelector = 'button_image_delete';
+export const avatarPopupSelector = 'popup_edit-avatar';
+export const avatarFormName = 'avatar';
 
 
 export const myId = '59d05da5ea81d432f473a759';
