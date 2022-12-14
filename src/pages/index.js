@@ -13,7 +13,6 @@ import {
     popupEditProfileOpenBtn,
     popupAddCardOpenBtn,
     cardSwitch,
-    initialCards,
     validConfig,
     formValidators,
     formConfiguration,
@@ -51,6 +50,8 @@ api.getUserInfo()
         console.log(err);
     });
 
+const user = new UserInfo(profileConfiguration);
+
 const handleAvatarSubmit = (data) => {
     api.patchAvatarInfo(data)
         .then((result) => {
@@ -70,8 +71,8 @@ const openDeletePopup = (data) => {
 const createCard = (item) => {
     const card = new Card({ item },
         cardSwitch,
-        myId,
         viewPopup.open.bind(viewPopup),
+        myId,
         openDeletePopup,
         api,
     );
@@ -81,9 +82,10 @@ const createCard = (item) => {
 api.getInitialCards()
     .then(result => {
         const cardsContainer = new Section({
-            items: result.reverse(),
-            renderer: createCard,
-        }, cardsContainerSelector);
+                items: result.reverse(),
+                renderer: createCard,
+            }, cardsContainerSelector
+        );
 
         cardsContainer.renderAllInitialItems();
     })
@@ -110,15 +112,21 @@ Array.from(document.forms).forEach(formElement => {
 const viewPopup = new PicturePopup(imagePopupSelector, popupConfiguration, viewPopupConfiguration);
 viewPopup.setEventListeners();
 
-const cardsContainer = new Section({
-    items: initialCards.reverse(),
-    renderer: createCard,
-}, cardsContainerSelector);
+const handleCardSubmit = (data) => {
+    api.addNewCard(data)
+        .then(result => {
+            const cardsContainer = new Section({
+                    items: result,
+                    renderer: createCard,
+                }, cardsContainerSelector
+            );
 
-cardsContainer.renderAllInitialItems();
-
-const handleCardSubmit = (item) => {
-    cardsContainer.addItem(item);
+            cardsContainer.addItem(result);
+            newCardPopup.close();
+        })
+        .catch((err) => {
+            console.log(err)
+        });
 };
 
 const newCardPopup = new PopupWithForm(
@@ -134,9 +142,6 @@ newCardPopup.setEventListeners();
 const addCardSubmitHandler = () => {
     newCardPopup.open();
 };
-
-
-const user = new UserInfo(profileConfiguration);
 
 const profilePopup = new PopupWithForm(
     profilePopupSelector,
