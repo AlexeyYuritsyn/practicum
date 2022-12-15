@@ -1,0 +1,36 @@
+.popup__button_image_delete {
+    border-radius: 2px;
+    width: 358px;
+    height: 50px;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    margin-top: 48px;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    color: #FFFFFF;
+    background-repeat: no-repeat;
+    border: none;
+    transition: opacity 0.2s ease-in;
+}
+
+.popup__button_image_delete:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 765px) {
+    .popup__button_image_delete {
+        width: 238px;
+        height: 46px;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        margin: 45px 0 0;
+        justify-content: center;
+    }
+}

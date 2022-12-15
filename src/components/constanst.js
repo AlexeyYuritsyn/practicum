@@ -1,8 +1,3 @@
-import whale from '../images/thomas-lipke-kkXDhAUnxYI-unsplash.jpg';
-import kostroma from '../images/alexandra-tran-ytgQImo6ugg-unsplash.jpg';
-import jellyfish from "../images/joel-filipe-_AjqGGafofE-unsplash.jpg";
-
-
 export const popupEditProfileOpenBtn = document.querySelector('.profile__edit-button');
 export const popupAvatarOpenBtn = document.querySelector('.profile__avatar-button');
 export const popupAddCardOpenBtn = document.querySelector('.profile__add-button');
@@ -52,7 +47,7 @@ export const imagePopupSelector = 'popup_big_image';
 export const newPlaceFormName = 'add-image';
 export const profileFormName = 'profileData';
 export const deletePopupSelector = 'popup_image_delete';
-export const confirmationButtonSelector = 'button_image_delete';
+export const confirmationButtonSelector = 'popup__button_image_delete';
 export const avatarPopupSelector = 'popup_edit-avatar';
 export const avatarFormName = 'avatar';
 
