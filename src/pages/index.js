@@ -26,12 +26,12 @@ import {
     viewPopupConfiguration,
     imagePopupSelector,
     myId,
-    deletePopupSelector,
+    confirmationPopupSelector,
     confirmationButtonSelector,
     popupAvatarOpenBtn,
     avatarPopupSelector,
     avatarFormName,
-} from "../components/constanst";
+} from "../utils/constanst";
 
 const api = new Api({
     baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-54',
@@ -55,7 +55,7 @@ const user = new UserInfo(profileConfiguration);
 const handleAvatarSubmit = (data) => {
     api.patchAvatarInfo(data)
         .then((result) => {
-            user.setUserAvatar({avatar: result.avatar});
+            user.setUserAvatar({ avatar: result.avatar });
             avatarPopup.close();
         })
         .catch((err) => {
@@ -68,7 +68,7 @@ const openDeletePopup = (data) => {
     deletePopup.open();
 }
 
-const createCard = (item) => {
+const cardData = (item) => {
     const card = new Card({ item },
         cardSwitch,
         viewPopup.open.bind(viewPopup),
@@ -82,10 +82,9 @@ const createCard = (item) => {
 api.getInitialCards()
     .then(result => {
         const cardsContainer = new Section({
-                items: result.reverse(),
-                renderer: createCard,
-            }, cardsContainerSelector
-        );
+            items: result.reverse(),
+            renderer: cardData,
+        }, cardsContainerSelector);
 
         cardsContainer.renderAllInitialItems();
     })
@@ -116,10 +115,9 @@ const handleCardSubmit = (data) => {
     api.addNewCard(data)
         .then(result => {
             const cardsContainer = new Section({
-                    items: result,
-                    renderer: createCard,
-                }, cardsContainerSelector
-            );
+                items: result,
+                renderer: cardData,
+            }, cardsContainerSelector);
 
             cardsContainer.addItem(result);
             newCardPopup.close();
@@ -139,7 +137,7 @@ const newCardPopup = new PopupWithForm(
 );
 newCardPopup.setEventListeners();
 
-const addCardSubmitHandler = () => {
+const openAddCardPopup = () => {
     newCardPopup.open();
 };
 
@@ -173,7 +171,7 @@ const avatarPopup = new PopupWithForm(
 );
 
 const deletePopup = new PopupWithConfirmation(
-    deletePopupSelector,
+    confirmationPopupSelector,
     popupConfiguration,
     confirmationButtonSelector,
     api,
@@ -182,5 +180,5 @@ const deletePopup = new PopupWithConfirmation(
 //Открытие попапа редактирования профиля
 popupEditProfileOpenBtn.addEventListener('click', handleProfilePopupOpen);
 popupAvatarOpenBtn.addEventListener('click', handleAvatarPopupOpen);
-popupAddCardOpenBtn.addEventListener('click', addCardSubmitHandler);
+popupAddCardOpenBtn.addEventListener('click', openAddCardPopup);
 avatarPopup.setEventListeners();

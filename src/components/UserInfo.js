@@ -13,7 +13,7 @@ export class UserInfo {
     }
 
     setUserAvatar = (data) => {
-      this._avatarElement.src = data.avatar || 'https://avatarko.ru/img/kartinka/33/multfilm_lyagushka_32117.jpg';
+        this._avatarElement.src = data.avatar;
     }
 
     getUserInfo = () => {

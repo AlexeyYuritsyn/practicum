@@ -8,7 +8,7 @@ export class PopupWithForm extends Popup {
         this._inputSelector = inputSelector;
         this._submitBtnSelector = submitBtnSelector;
         this._getterCallBack = getterCallBack;
-        this._formSelector = formSelector;
+        //this._formSelector = formSelector;
         this._formElement = document.forms[this._formName];
         this._inputs = Array.from(this._formElement.querySelectorAll(`.${this._inputSelector}`));
         this._submitBtn = this._formElement.querySelector(`.${this._submitBtnSelector}`);
@@ -48,7 +48,7 @@ export class PopupWithForm extends Popup {
             this._formElement.reset();
         }
         this._errorsResetCallBack();
-        if(this._popupSelector === 'popup_type_add-image') {
+        if (this._popupSelector === 'popup_type_add-image') {
             this._submitBtn.textContent = 'Создать';
         } else {
             this._submitBtn.textContent = 'Сохранить';

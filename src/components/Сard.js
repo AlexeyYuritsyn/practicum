@@ -18,7 +18,7 @@ export class Card {
     }
 
     _like = () => {
-        if(!this._hasMyLikes(this._item.likes)){
+        if (!this._hasMyLikes(this._item.likes)) {
             this._api.setLike(this._item)
                 .then((result) => {
                     this._likes.textContent = result.likes.length;
@@ -28,7 +28,7 @@ export class Card {
         } else {
             this._api.deleteLike(this._item)
                 .then((result) => {
-                    this._likes.textContent = this._item.likes.length - 1;
+                    this._likes.textContent = result.likes.length;
                     this._likeButton.classList.remove('button__like_active');
                     this._item.likes = result.likes;
                 })
@@ -47,17 +47,17 @@ export class Card {
     }
 
     _handleImageClick = () => {
-        this._openPopupImage({name: this._name, link: this._link});
+        this._openPopupImage({ name: this._name, link: this._link });
     }
 
     _setEventListeners() {
-        this._likeButton.addEventListener ('click', this._like); //лайк
+        this._likeButton.addEventListener('click', this._like); //лайк
         this._element.querySelector('.card__button_remove').addEventListener('click', this._openPopup); //Удаление картинки
         this._element.querySelector('.button__card').addEventListener('click', this._handleImageClick); //открытие картинки
     }
 
-    _activeRemoveButton() {
-        if(this._item.owner._id === this._myId) {
+    _checkDeleteButton() {
+        if (this._item.owner._id === this._myId) {
             this._element.querySelector('.card__button_remove').classList.add('card__button_remove-active');
         }
     }
@@ -80,10 +80,10 @@ export class Card {
         this._element.querySelector('.card__name').textContent = this._name;
         this._likes.textContent = this._numberLikes;
 
-        if(this._hasMyLikes(this._item.likes)) {
+        if (this._hasMyLikes(this._item.likes)) {
             this._likeButton.classList.add('button__like_active');
         }
-        this._activeRemoveButton();
+        this._checkDeleteButton();
         return this._element;
     }
 }
