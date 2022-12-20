@@ -25,13 +25,14 @@ import {
     profilePopupSelector,
     viewPopupConfiguration,
     imagePopupSelector,
-    myId,
     confirmationPopupSelector,
     confirmationButtonSelector,
     popupAvatarOpenBtn,
     avatarPopupSelector,
     avatarFormName,
 } from "../utils/constanst";
+
+let userId;
 
 const api = new Api({
     baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-54',
@@ -41,14 +42,19 @@ const api = new Api({
     }
 });
 
-api.getUserInfo()
-    .then(result => {
-        user.setUserInfo({ title: result.name, job: result.about });
-        user.setUserAvatar({ avatar: result.avatar });
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+    .then(([userData, initialCards])=>{
+        //попадаем сюда когда оба промиса будут выполнены
+        userId = userData._id
+        user.setUserInfo({ title: userData.name, job: userData.about });
+        user.setUserAvatar({ avatar: userData.avatar });
+
+        cardsContainer.renderAllInitialItems(initialCards.reverse());
     })
-    .catch((err) => {
+    .catch((err)=>{
+        //попадаем сюда если один из промисов завершаться ошибкой
         console.log(err);
-    });
+    })
 
 const user = new UserInfo(profileConfiguration);
 
@@ -68,29 +74,16 @@ const openDeletePopup = (data) => {
     deletePopup.open();
 }
 
-const cardData = (item) => {
+const createCard = (item) => {
     const card = new Card({ item },
         cardSwitch,
         viewPopup.open.bind(viewPopup),
-        myId,
+        userId,
         openDeletePopup,
         api,
     );
     return card.generateCard();
 };
-
-api.getInitialCards()
-    .then(result => {
-        const cardsContainer = new Section({
-            items: result.reverse(),
-            renderer: cardData,
-        }, cardsContainerSelector);
-
-        cardsContainer.renderAllInitialItems();
-    })
-    .catch((err) => {
-        console.log(err);
-    });
 
 const handleProfileFormSubmit = (data) => {
     api.patchUserInfo(data)
@@ -111,15 +104,19 @@ Array.from(document.forms).forEach(formElement => {
 const viewPopup = new PicturePopup(imagePopupSelector, popupConfiguration, viewPopupConfiguration);
 viewPopup.setEventListeners();
 
+const cardsContainer = new Section(
+    {
+        renderer: (item) => {
+            cardsContainer.addItem(createCard(item));
+        },
+    },
+    cardsContainerSelector
+);
+
 const handleCardSubmit = (data) => {
     api.addNewCard(data)
         .then(result => {
-            const cardsContainer = new Section({
-                items: result,
-                renderer: cardData,
-            }, cardsContainerSelector);
-
-            cardsContainer.addItem(result);
+            cardsContainer.addItem(createCard(result));
             newCardPopup.close();
         })
         .catch((err) => {
