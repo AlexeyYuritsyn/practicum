@@ -97,8 +97,8 @@ export class Api {
             })
     }
 
-    setLike(data) {
-        return fetch(`${this._baseUrl}/cards/${data._id}/likes`, {
+    setLike(cardId) {
+        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
                 method: 'PUT',
                 headers: {
                     authorization: this._authorization
@@ -109,8 +109,8 @@ export class Api {
             })
     }
 
-    deleteLike(data) {
-        return fetch(`${this._baseUrl}/cards/${data._id}/likes`, {
+    deleteLike(cardId) {
+        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
                 method: 'DELETE',
                 headers: {
                     authorization: this._authorization

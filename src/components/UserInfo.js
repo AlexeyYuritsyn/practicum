@@ -1,5 +1,5 @@
 export class UserInfo {
-    constructor({ titleSelector, jobSelector, avatarSelector }) {
+    constructor({titleSelector, jobSelector, avatarSelector}) {
         this._titleSelector = titleSelector;
         this._jobSelector = jobSelector;
         this._titleElement = document.querySelector(`.${this._titleSelector}`);
@@ -17,6 +17,10 @@ export class UserInfo {
     }
 
     getUserInfo = () => {
-        return { title: this._titleElement.textContent, job: this._jobElement.textContent };
+        return {
+            title: this._titleElement.textContent,
+            job: this._jobElement.textContent,
+            avatar: this._avatarElement.textContent
+        };
     }
 }

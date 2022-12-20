@@ -1,36 +1,35 @@
 import '../pages/index.css';
 
 import Section from "../components/Section.js";
-import { Card } from "../components/Сard";
-import { FormValidator } from "../components/FormValidator.js";
-import { PopupWithForm } from "../components/PopupWithForm.js";
-import { Api } from "../components/Api";
+import {Card} from "../components/Сard";
+import {FormValidator} from "../components/FormValidator.js";
+import {PopupWithForm} from "../components/PopupWithForm.js";
+import {Api} from "../components/Api";
 
-import { UserInfo } from "../components/UserInfo.js";
-import { PicturePopup } from "../components/PicturePopup";
-import { PopupWithConfirmation } from '../components/PopupWithConfirmation.js';
+import {UserInfo} from "../components/UserInfo.js";
+import {PicturePopup} from "../components/PicturePopup";
+import {PopupWithConfirmation} from '../components/PopupWithConfirmation.js';
 import {
-    popupEditProfileOpenBtn,
-    popupAddCardOpenBtn,
-    cardSwitch,
-    validConfig,
-    formValidators,
-    formConfiguration,
-    popupConfiguration,
-    cardsContainerSelector,
-    newPlacePopupSelector,
-    newPlaceFormName,
-    profileFormName,
-    profileConfiguration,
-    profilePopupSelector,
-    viewPopupConfiguration,
-    imagePopupSelector,
-    myId,
-    confirmationPopupSelector,
-    confirmationButtonSelector,
-    popupAvatarOpenBtn,
-    avatarPopupSelector,
     avatarFormName,
+    avatarPopupSelector,
+    cardsContainerSelector,
+    cardSwitch,
+    confirmationButtonSelector,
+    confirmationPopupSelector,
+    formConfiguration,
+    formValidators,
+    imagePopupSelector,
+    newPlaceFormName,
+    newPlacePopupSelector,
+    popupAddCardOpenBtn,
+    popupAvatarOpenBtn,
+    popupConfiguration,
+    popupEditProfileOpenBtn,
+    profileConfiguration,
+    profileFormName,
+    profilePopupSelector,
+    validConfig,
+    viewPopupConfiguration,
 } from "../utils/constanst";
 
 const api = new Api({
@@ -41,16 +40,79 @@ const api = new Api({
     }
 });
 
-api.getUserInfo()
-    .then(result => {
-        user.setUserInfo({ title: result.name, job: result.about });
-        user.setUserAvatar({ avatar: result.avatar });
+let userId;
+
+Promise.all([api.getInitialCards(), api.getUserInfo()])
+    .then(([InitialCards, userData]) => {
+        userId = userData._id;
+        user.setUserInfo({ title: userData.name, job: userData.about });
+        user.setUserAvatar({ avatar: userData.avatar });
+        renderCards.renderAllInitialItems(InitialCards);
     })
     .catch((err) => {
-        console.log(err);
+        console.log(`Error: ${err}`);
     });
 
 const user = new UserInfo(profileConfiguration);
+
+const renderCard = (data) => {
+    const newCard = new Card(
+        data,
+        cardSwitch,
+        userId,
+        data._id,
+        data.owner._id,
+        {
+            handleCardClick: (name, image) => {
+                viewPopup.open(name, image);
+            },
+            handleDeleteClick: (cardId) => {
+                deletePopup.open();
+                deletePopup.setCallback(() => {
+                    api
+                        .deleteCard(cardId)
+                        .then(() => {
+                            newCard.deletePlace();
+                            deletePopup.close();
+                        })
+                        .catch((err) => {
+                            console.log(`Error: ${err}`);
+                        });
+                });
+            },
+            handleLikeClick: (cardId) => {
+                api
+                    .setLike(cardId)
+                    .then((data) => {
+                        newCard.handleLikeCard(data);
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+            },
+            handleRemoveLike: (cardId) => {
+                api
+                    .deleteLike(cardId)
+                    .then((data) => {
+                        newCard.handleLikeCard(data);
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+            },
+        }
+    );
+    return newCard.generateCard();
+};
+
+const renderCards = new Section(
+    {
+        renderer: (data) => {
+            renderCards.addItem(renderCard(data));
+        },
+    },
+    cardsContainerSelector
+);
 
 const handleAvatarSubmit = (data) => {
     api.patchAvatarInfo(data)
@@ -62,35 +124,6 @@ const handleAvatarSubmit = (data) => {
             console.log(err);
         })
 };
-
-const openDeletePopup = (data) => {
-    deletePopup.setEventListeners(data);
-    deletePopup.open();
-}
-
-const cardData = (item) => {
-    const card = new Card({ item },
-        cardSwitch,
-        viewPopup.open.bind(viewPopup),
-        myId,
-        openDeletePopup,
-        api,
-    );
-    return card.generateCard();
-};
-
-api.getInitialCards()
-    .then(result => {
-        const cardsContainer = new Section({
-            items: result.reverse(),
-            renderer: cardData,
-        }, cardsContainerSelector);
-
-        cardsContainer.renderAllInitialItems();
-    })
-    .catch((err) => {
-        console.log(err);
-    });
 
 const handleProfileFormSubmit = (data) => {
     api.patchUserInfo(data)
@@ -112,24 +145,22 @@ const viewPopup = new PicturePopup(imagePopupSelector, popupConfiguration, viewP
 viewPopup.setEventListeners();
 
 const handleCardSubmit = (data) => {
-    api.addNewCard(data)
-        .then(result => {
-            const cardsContainer = new Section({
-                items: result,
-                renderer: cardData,
-            }, cardsContainerSelector);
-
-            cardsContainer.addItem(result);
+    api
+        .addNewCard(data)
+        .then((data) => {
+            renderCards.addItem(renderCard(data));
             newCardPopup.close();
         })
         .catch((err) => {
-            console.log(err)
-        });
+            console.log(`Form error: ${err}`);
+        })
 };
+
+const handleFormElement = (formName) => document.forms[formName]
 
 const newCardPopup = new PopupWithForm(
     newPlacePopupSelector,
-    newPlaceFormName,
+    handleFormElement('add-image'),
     popupConfiguration,
     formConfiguration,
     formValidators[newPlaceFormName].resetValidation,
@@ -143,7 +174,7 @@ const openAddCardPopup = () => {
 
 const profilePopup = new PopupWithForm(
     profilePopupSelector,
-    profileFormName,
+    handleFormElement('profileData'),
     popupConfiguration,
     formConfiguration,
     formValidators[profileFormName].resetValidation,
@@ -163,7 +194,7 @@ const handleAvatarPopupOpen = () => {
 
 const avatarPopup = new PopupWithForm(
     avatarPopupSelector,
-    avatarFormName,
+    handleFormElement('avatar'),
     popupConfiguration,
     formConfiguration,
     formValidators[avatarFormName].resetValidation,
@@ -174,7 +205,6 @@ const deletePopup = new PopupWithConfirmation(
     confirmationPopupSelector,
     popupConfiguration,
     confirmationButtonSelector,
-    api,
 );
 
 //Открытие попапа редактирования профиля
@@ -182,3 +212,4 @@ popupEditProfileOpenBtn.addEventListener('click', handleProfilePopupOpen);
 popupAvatarOpenBtn.addEventListener('click', handleAvatarPopupOpen);
 popupAddCardOpenBtn.addEventListener('click', openAddCardPopup);
 avatarPopup.setEventListeners();
+deletePopup.setEventListeners();

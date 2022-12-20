@@ -9,7 +9,7 @@ export class PicturePopup extends Popup {
         this._captionElement = document.querySelector(`.${this._captionSelector}`);
     }
 
-    open({ name, link }) {
+    open(name, link) {
         this._imageElement.src = link;
         this._imageElement.alt = name;
         this._captionElement.textContent = name;

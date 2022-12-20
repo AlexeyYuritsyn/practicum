@@ -40,7 +40,7 @@ export const viewPopupConfiguration = {
     captionSelector: 'popup__text',
 }
 
-export const cardsContainerSelector = 'elements__table';
+export const cardsContainerSelector = '.elements__table';
 export const newPlacePopupSelector = 'popup_add-card';
 export const profilePopupSelector = 'popup_edit-profile';
 export const imagePopupSelector = 'popup_big_image';
@@ -50,6 +50,3 @@ export const confirmationPopupSelector = 'popup_image_delete';
 export const confirmationButtonSelector = 'popup__button_image_delete';
 export const avatarPopupSelector = 'popup_edit-avatar';
 export const avatarFormName = 'avatar';
-
-
-export const myId = "59d05da5ea81d432f473a759";
