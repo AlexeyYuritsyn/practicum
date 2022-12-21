@@ -76,7 +76,7 @@ export class Api {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: data.name,
+                    name: data.place,
                     link: data.link
                 })
             })

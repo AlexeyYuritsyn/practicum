@@ -57,15 +57,15 @@
             <h2 class="popup__title">Редактировать профиль</h2>
             <form class="form popup__form" name="profileData" novalidate>
                 <fieldset class="popup__form-fieldset">
-                    <input type="text" class="popup__field popup__field-title" placeholder="Введите имя" value="" id="input-title" minlength="2" maxlength="40" required>
-                    <span class="popup__input-error input-title-error"></span>
+                    <input type="text" class="popup__field popup__field-title" placeholder="Введите имя" value="" id="title" minlength="2" maxlength="40" required>
+                    <span class="popup__input-error title-error"></span>
                 </fieldset>
 
                 <fieldset class="popup__form-fieldset">
-                    <input type="text" class="popup__field popup__field-job" placeholder="О Вас" value="" id="input-job" minlength="2" maxlength="200" required>
-                    <span class="popup__input-error  input-job-error"></span>
+                    <input type="text" class="popup__field popup__field-job" placeholder="О Вас" value="" id="job" minlength="2" maxlength="200" required>
+                    <span class="popup__input-error  job-error"></span>
                 </fieldset>
-                <button class="button popup__button-save" value="Сохранить" id="button-save">Сохранить</button>
+                <button class="button popup__button popup__button-save" value="Сохранить" id="button-save">Сохранить</button>
             </form>
         </div>
     </div>
@@ -74,10 +74,10 @@
         <div class="popup__container">
             <button type="button" class="button popup__button-close" aria-label="Закрыть окно"></button>
             <h2 class="popup__title">Обновить аватар</h2>
-            <form class="form popup__form" name="avatar" novalidate>
+            <form class="form popup__form" name="avatar-form" novalidate>
                 <fieldset class="popup__form-fieldset">
-                    <input type="url" class="popup__field popup__field-link" placeholder="Ссылка на картинку" value="" id="input-avatar" required>
-                    <span class="popup__input-error input-avatar-error"></span>
+                    <input type="url" class="popup__field popup__field-link" placeholder="Ссылка на картинку" value="" id="avatar" required>
+                    <span class="popup__input-error avatar-error"></span>
                 </fieldset>
                 <button class="popup__button popup__button-save" value="Сохранить" id="button-avatar">Сохранить</button>
             </form>
@@ -91,17 +91,17 @@
 
                 <h2 class="popup__title">Новое место</h2>
                 <fieldset class="popup__form-fieldset">
-                    <input type="text" class="popup__field popup__field-place" id="input-name" placeholder="Название" value="" minlength="2" maxlength="30" required>
-                    <span class="popup__input-error input-name-error"></span>
+                    <input type="text" class="popup__field popup__field-place" id="place" placeholder="Название" value="" minlength="2" maxlength="30" required>
+                    <span class="popup__input-error place-error"></span>
 
                 </fieldset>
                 <fieldset class="popup__form-fieldset">
-                    <input type="url" class="popup__field popup__field-link" id="input-link" placeholder="Ссылка на картинку" value="" required>
-                    <span class="popup__input-error input-link-error"></span>
+                    <input type="url" class="popup__field popup__field-link" id="link" placeholder="Ссылка на картинку" value="" required>
+                    <span class="popup__input-error link-error"></span>
 
                 </fieldset>
 
-                <button type="submit" class="popup__button popup__button-save" id="button-add">Сохранить</button>
+                <button type="submit" class="popup__button popup__button-save" id="button-add">Создать</button>
 
             </form>
         </div>

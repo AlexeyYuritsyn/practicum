@@ -31,6 +31,7 @@ import {
     validConfig,
     viewPopupConfiguration,
 } from "../utils/constanst";
+import {RenderLoading} from "../components/RenderLoading";
 
 const api = new Api({
     baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-54',
@@ -77,7 +78,7 @@ const renderCard = (data) => {
                         })
                         .catch((err) => {
                             console.log(`Error: ${err}`);
-                        });
+                        })
                 });
             },
             handleLikeClick: (cardId) => {
@@ -115,6 +116,7 @@ const renderCards = new Section(
 );
 
 const handleAvatarSubmit = (data) => {
+    loaderAvatar.renderLoading(true);
     api.patchAvatarInfo(data)
         .then((result) => {
             user.setUserAvatar({ avatar: result.avatar });
@@ -123,9 +125,11 @@ const handleAvatarSubmit = (data) => {
         .catch((err) => {
             console.log(err);
         })
+        .finally(() => loaderAvatar.renderLoading(false));
 };
 
 const handleProfileFormSubmit = (data) => {
+    loaderProfileEdit.renderLoading(true);
     api.patchUserInfo(data)
         .then((result) => {
             user.setUserInfo({ title: result.name, job: result.about });
@@ -134,6 +138,7 @@ const handleProfileFormSubmit = (data) => {
         .catch((err) => {
             console.log(err);
         })
+        .finally(() => loaderProfileEdit.renderLoading(false));
 };
 
 Array.from(document.forms).forEach(formElement => {
@@ -145,6 +150,7 @@ const viewPopup = new PicturePopup(imagePopupSelector, popupConfiguration, viewP
 viewPopup.setEventListeners();
 
 const handleCardSubmit = (data) => {
+    loaderNewCard.renderLoading(true);
     api
         .addNewCard(data)
         .then((data) => {
@@ -154,13 +160,14 @@ const handleCardSubmit = (data) => {
         .catch((err) => {
             console.log(`Form error: ${err}`);
         })
+        .finally(() => loaderNewCard.renderLoading(false));
 };
 
 const handleFormElement = (formName) => document.forms[formName]
 
 const newCardPopup = new PopupWithForm(
     newPlacePopupSelector,
-    handleFormElement('add-image'),
+    handleFormElement(newPlaceFormName),
     popupConfiguration,
     formConfiguration,
     formValidators[newPlaceFormName].resetValidation,
@@ -174,13 +181,23 @@ const openAddCardPopup = () => {
 
 const profilePopup = new PopupWithForm(
     profilePopupSelector,
-    handleFormElement('profileData'),
+    handleFormElement(profileFormName),
     popupConfiguration,
     formConfiguration,
     formValidators[profileFormName].resetValidation,
     handleProfileFormSubmit,
     user.getUserInfo,
 );
+
+const loaderProfileEdit = new RenderLoading({
+    popup: profilePopup,
+    textLoader: "Сохранение...",
+});
+
+const loaderNewCard = new RenderLoading({
+    popup: newCardPopup,
+    textLoader: "Создание...",
+});
 
 profilePopup.setEventListeners();
 
@@ -194,17 +211,23 @@ const handleAvatarPopupOpen = () => {
 
 const avatarPopup = new PopupWithForm(
     avatarPopupSelector,
-    handleFormElement('avatar'),
+    handleFormElement(avatarFormName),
     popupConfiguration,
     formConfiguration,
     formValidators[avatarFormName].resetValidation,
     handleAvatarSubmit
 );
 
+const loaderAvatar = new RenderLoading({
+    popup: avatarPopup,
+    textLoader: "Сохранение...",
+});
+
 const deletePopup = new PopupWithConfirmation(
     confirmationPopupSelector,
     popupConfiguration,
     confirmationButtonSelector,
+    handleFormElement(newPlaceFormName),
 );
 
 //Открытие попапа редактирования профиля

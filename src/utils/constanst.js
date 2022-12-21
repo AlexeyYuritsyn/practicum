@@ -49,4 +49,4 @@ export const profileFormName = 'profileData';
 export const confirmationPopupSelector = 'popup_image_delete';
 export const confirmationButtonSelector = 'popup__button_image_delete';
 export const avatarPopupSelector = 'popup_edit-avatar';
-export const avatarFormName = 'avatar';
+export const avatarFormName = 'avatar-form';

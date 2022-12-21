@@ -17,20 +17,20 @@ export class PopupWithForm extends Popup {
     _getInputValues() {
         const values = {};
         this._inputs.forEach((inputElement) => {
-            values[inputElement.id.slice(6)] = inputElement.value;
+            values[inputElement.id] = inputElement.value;
         })
         return values;
     }
 
     _setInputValues(values) {
         this._inputs.forEach((inputElement) => {
-            inputElement.value = values[inputElement.id.slice(6)];
+            inputElement.value = values[inputElement.id];
         })
     }
 
     _handleSubmit = (evt) => {
         evt.preventDefault();
-        this._submitBtn.textContent = 'Сохранение...';
+        // this._submitBtn.textContent = 'Сохранение...';
         this._submitBtn.disabled = true;
         this._submitCallBack(this._getInputValues());
     }
@@ -47,11 +47,6 @@ export class PopupWithForm extends Popup {
             this._formElement.reset();
         }
         this._errorsResetCallBack();
-        if (this._popupSelector === 'popup_type_add-image') {
-            this._submitBtn.textContent = 'Создать';
-        } else {
-            this._submitBtn.textContent = 'Сохранить';
-        }
         super.open();
 
     }
