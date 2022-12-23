@@ -1,14 +1,14 @@
 export class Card {
-    constructor (data, cardSwitch, userId, cardId, ownerId, handle){
+    constructor(data, cardSwitch, userId, cardId, ownerId, handlers) {
         this._cardSelector = cardSwitch;
-        this._handleCardClick = handle.handleCardClick;
+        this._handleCardClick = handlers.handleCardClick;
         this._likes = data.likes;
         this._userId = userId;
         this._cardId = cardId;
         this._ownerId = ownerId;
-        this._handleLikeClick = handle.handleLikeClick;
-        this._handleDeleteClick = handle.handleDeleteClick;
-        this._handleRemoveLike  = handle.handleRemoveLike;
+        this._handleLikeClick = handlers.handleLikeClick;
+        this._handleDeleteClick = handlers.handleDeleteClick;
+        this._handleRemoveLike = handlers.handleRemoveLike;
         this._name = data.name;
         this._link = data.link;
     }
@@ -27,7 +27,7 @@ export class Card {
         this._cardImage.alt = this._name;
         this._element.querySelector('.card__name').textContent = this._name;
         this._likesCount.textContent = this._likes.length;
-        this._cardLiked();
+        this._checkIsLiked();
         this._hasDeleteButton();
         this._setEventListeners();
         return this._element;
@@ -38,10 +38,10 @@ export class Card {
         this._element = null;
     }
 
-    _cardLiked() {
+    _checkIsLiked() {
         if (this._likes.some((user) => {
-            return this._userId === user._id;
-        })) {
+                return this._userId === user._id;
+            })) {
             this._likeButton.classList.add('button__like_active');
         }
     }
@@ -60,16 +60,16 @@ export class Card {
 
     _setEventListeners() {
         this._deleteBtn.addEventListener('click', () => {
-            this._handleDeleteClick(this._cardId); });
-
-        this._likeButton.addEventListener("click", () => {
-            if (this._likeButton.classList.contains('button__like_active')){
-                this._handleRemoveLike(this._cardId);
-            }
-            else {this._handleLikeClick(this._cardId)}
+            this._handleDeleteClick(this._cardId);
         });
 
-        this._cardImage.addEventListener('click', () => {this._handleCardClick(this._name, this._link)});
+        this._likeButton.addEventListener("click", () => {
+            if (this._likeButton.classList.contains('button__like_active')) {
+                this._handleRemoveLike(this._cardId);
+            } else { this._handleLikeClick(this._cardId) }
+        });
+
+        this._cardImage.addEventListener('click', () => { this._handleCardClick(this._name, this._link) });
 
     }
 }

@@ -11,6 +11,10 @@ export class PopupWithConfirmation extends Popup {
         this._handleSubmit = callback;
     }
 
+    setSubmitButtonText = (buttonText) => {
+        this._confirmationButton.textContent = buttonText;
+    }
+
     setEventListeners() {
         super.setEventListeners();
         this._confirmationButton.addEventListener("click", () => {
